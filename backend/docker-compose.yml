@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: fragancias_le_france-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: Giani21
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: fragancias_le_france
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
