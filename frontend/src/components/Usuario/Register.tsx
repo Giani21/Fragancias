@@ -1,73 +1,171 @@
+import { useState } from 'react';
+import { Mail, Lock, Sprout, User, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 
-const Register: React.FC = () => {
+const Register = () => {
   const navigate = useNavigate();
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setIsLoading(true);
 
-    // Validación simple
     if (!nombre || !email || !password) {
       setError('Por favor, completa todos los campos.');
+      setIsLoading(false);
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
-        nombre,
-        email,
-        password,
-      });
-
+      await axios.post('http://localhost:5000/api/auth/register', { nombre, email, password });
       alert('Usuario registrado con éxito');
-      // Redirigir al login después de registro exitoso
       navigate('/login');
-    } catch (error) {
+    } catch (err) {
       setError('Hubo un error al registrar al usuario. Intenta de nuevo.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
-      <h2>Registrarse</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="nombre">Nombre</label>
-          <input
-            type="text"
-            id="nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
+    <motion.div
+      className="min-h-screen flex"
+      initial={{ opacity: 0, x: window.innerWidth }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -window.innerWidth }}
+      transition={{ duration: 1, ease: 'easeInOut', type: 'tween' }}
+    >
+      {/* Panel izquierdo (formulario) */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-purple-50 to-white">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center p-4 bg-purple-100 rounded-full mb-6">
+              <Sprout className="h-10 w-10 text-purple-600" />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800">Crear cuenta</h2>
+            <p className="mt-3 text-gray-500">Completa tus datos para comenzar</p>
+          </div>
+
+          {error && (
+            <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-md flex items-start">
+              <AlertCircle className="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Nombre */}
+            <div className="space-y-4">
+              <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
+                Nombre completo
+              </label>
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="nombre"
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="Tu nombre completo"
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="space-y-4">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Correo electrónico
+              </label>
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="tu@email.com"
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div className="space-y-4">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Contraseña
+              </label>
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            {/* Botón */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-3 px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-70"
+            >
+              {isLoading ? (
+                <span className="flex items-center">
+                  <Loader2 className="animate-spin h-5 w-5 mr-2" />
+                  Registrando...
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  Registrarse
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              )}
+            </button>
+          </form>
+
+          <p className="mt-8 text-center text-sm text-gray-600">
+            ¿Ya tenés una cuenta?{' '}
+            <a href="/login" className="font-medium text-purple-600 hover:text-purple-500">
+              Iniciar sesión
+            </a>
+          </p>
         </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+      </div>
+
+      {/* Panel derecho (imagen decorativa) */}
+      <div
+        className="hidden lg:block lg:w-1/2 bg-cover bg-center"
+        style={{ backgroundImage: "url('/api/placeholder/800/1200')" }}
+      >
+        <div className="h-full w-full bg-gradient-to-t from-purple-900/90 via-purple-600/60 to-transparent flex flex-col justify-end p-12">
+          <h1 className="text-white text-4xl font-bold mb-4">Essence</h1>
+          <p className="text-white/80 text-xl mb-6">Regístrate y encuentra tu aroma ideal</p>
+          <div className="flex space-x-4 mb-12">
+            <span className="inline-block w-12 h-1 bg-white rounded-full"></span>
+            <span className="inline-block w-4 h-1 bg-white/50 rounded-full"></span>
+            <span className="inline-block w-4 h-1 bg-white/50 rounded-full"></span>
+          </div>
         </div>
-        <div>
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Registrar</button>
-      </form>
-    </div>
+      </div>
+    </motion.div>
   );
 };
 

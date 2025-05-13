@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Mail, Lock, Sprout, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -26,10 +27,8 @@ const Login = () => {
         return;
       }
 
-      // Guardar token en localStorage
       localStorage.setItem('token', data.token);
-      
-      // Aquí podrías redirigir al usuario o actualizar el estado global
+      // Redirección o lógica post-login va acá
 
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
@@ -40,11 +39,19 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Panel izquierdo (imagen decorativa) */}
-      <div className="hidden lg:block lg:w-1/2 bg-cover bg-center" 
-           style={{ backgroundImage: "url('/api/placeholder/800/1200')" }}>
-        <div className="h-full w-full bg-gradient-to-t from-purple-900/90 via-purple-600/60 to-transparent flex flex-col justify-end p-12">
+    <motion.div
+      className="flex h-screen"
+      initial={{ opacity: 0, x: -window.innerWidth }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: window.innerWidth }}
+      transition={{ duration: 1, ease: 'easeInOut', type: 'tween' }}
+    >
+      {/* Sección visual */}
+      <div
+        className="hidden lg:flex w-1/2 items-center justify-center bg-cover bg-center relative"
+        style={{ backgroundImage: "url('/api/placeholder/800/1200')" }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/90 via-purple-600/60 to-transparent p-12 flex flex-col justify-end">
           <h1 className="text-white text-4xl font-bold mb-4">Essence</h1>
           <p className="text-white/80 text-xl mb-6">Descubre la fragancia que refleja tu personalidad</p>
           <div className="flex space-x-4 mb-12">
@@ -55,8 +62,8 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Panel derecho (formulario) */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-purple-50 to-white">
+      {/* Sección formulario */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-b from-purple-50 to-white p-8">
         <div className="w-full max-w-md">
           {/* Logo y bienvenida */}
           <div className="text-center mb-10">
@@ -67,7 +74,7 @@ const Login = () => {
             <p className="mt-3 text-gray-500">Ingresa a tu cuenta y descubre nuestras nuevas fragancias</p>
           </div>
 
-          {/* Mensaje de error */}
+          {/* Error */}
           {error && (
             <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-md flex items-start">
               <AlertCircle className="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -77,17 +84,14 @@ const Login = () => {
 
           {/* Formulario */}
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Correo electrónico
-              </label>
-              <div className="relative rounded-md shadow-sm">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo electrónico</label>
+              <div className="relative mt-1">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   id="email"
-                  name="email"
                   type="email"
                   required
                   value={email}
@@ -98,22 +102,17 @@ const Login = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Contraseña
-                </label>
-                <button type="button" className="text-sm font-medium text-purple-600 hover:text-purple-500">
-                  ¿Olvidaste tu contraseña?
-                </button>
+            <div>
+              <div className="flex justify-between items-center">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
+                <button type="button" className="text-sm text-purple-600 hover:text-purple-500">¿Olvidaste tu contraseña?</button>
               </div>
-              <div className="relative rounded-md shadow-sm">
+              <div className="relative mt-1">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   id="password"
-                  name="password"
                   type="password"
                   required
                   value={password}
@@ -127,13 +126,10 @@ const Login = () => {
             <div className="flex items-center">
               <input
                 id="remember-me"
-                name="remember-me"
                 type="checkbox"
                 className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                Recordarme
-              </label>
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">Recordarme</label>
             </div>
 
             <button
@@ -155,6 +151,7 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Login con redes */}
           <div className="mt-10">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -166,16 +163,10 @@ const Login = () => {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
+              <button className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
                 Google
               </button>
-              <button
-                type="button"
-                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
+              <button className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
                 Facebook
               </button>
             </div>
@@ -183,13 +174,13 @@ const Login = () => {
 
           <p className="mt-8 text-center text-sm text-gray-600">
             ¿No tienes una cuenta?{' '}
-            <a href="#" className="font-medium text-purple-600 hover:text-purple-500">
+            <a href="/register" className="font-medium text-purple-600 hover:text-purple-500">
               Regístrate para descubrir tu aroma
             </a>
           </p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
