@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+    "dev": "npm run db:up && ts-node-dev --respawn --transpile-only src/server.ts",
+    "db:up": "docker compose up -d"
   },
   "keywords": [],
   "author": "",

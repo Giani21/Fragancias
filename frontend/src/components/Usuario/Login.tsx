@@ -1,11 +1,16 @@
 import { useState } from 'react';
+import { Mail, Lock, Sprout, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setIsLoading(true);
 
     try {
       const res = await fetch('http://localhost:5000/api/auth/login', {
@@ -17,39 +22,174 @@ const Login = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.message || 'Error en el login');
+        setError(data.message || 'Error en el login');
         return;
       }
 
-      alert('Login exitoso');
-      console.log(data); // Token y datos del usuario
-
-      // Guardar token en localStorage o en el estado global si lo necesitás
+      // Guardar token en localStorage
       localStorage.setItem('token', data.token);
+      
+      // Aquí podrías redirigir al usuario o actualizar el estado global
 
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
+      setError('Error al conectar con el servidor');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        value={password}
-        placeholder="Contraseña"
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">Iniciar sesión</button>
-    </form>
+    <div className="min-h-screen flex">
+      {/* Panel izquierdo (imagen decorativa) */}
+      <div className="hidden lg:block lg:w-1/2 bg-cover bg-center" 
+           style={{ backgroundImage: "url('/api/placeholder/800/1200')" }}>
+        <div className="h-full w-full bg-gradient-to-t from-purple-900/90 via-purple-600/60 to-transparent flex flex-col justify-end p-12">
+          <h1 className="text-white text-4xl font-bold mb-4">Essence</h1>
+          <p className="text-white/80 text-xl mb-6">Descubre la fragancia que refleja tu personalidad</p>
+          <div className="flex space-x-4 mb-12">
+            <span className="inline-block w-12 h-1 bg-white rounded-full"></span>
+            <span className="inline-block w-4 h-1 bg-white/50 rounded-full"></span>
+            <span className="inline-block w-4 h-1 bg-white/50 rounded-full"></span>
+          </div>
+        </div>
+      </div>
+
+      {/* Panel derecho (formulario) */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-purple-50 to-white">
+        <div className="w-full max-w-md">
+          {/* Logo y bienvenida */}
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center p-4 bg-purple-100 rounded-full mb-6">
+              <Sprout className="h-10 w-10 text-purple-600" />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800">Bienvenido de nuevo</h2>
+            <p className="mt-3 text-gray-500">Ingresa a tu cuenta y descubre nuestras nuevas fragancias</p>
+          </div>
+
+          {/* Mensaje de error */}
+          {error && (
+            <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-md flex items-start">
+              <AlertCircle className="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          )}
+
+          {/* Formulario */}
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-4">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Correo electrónico
+              </label>
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="tu@email.com"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Contraseña
+                </label>
+                <button type="button" className="text-sm font-medium text-purple-600 hover:text-purple-500">
+                  ¿Olvidaste tu contraseña?
+                </button>
+              </div>
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                Recordarme
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-3 px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-70"
+            >
+              {isLoading ? (
+                <span className="flex items-center">
+                  <Loader2 className="animate-spin h-5 w-5 mr-2" />
+                  Iniciando sesión...
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  Iniciar sesión
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-10">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">O continúa con</span>
+              </div>
+            </div>
+
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Google
+              </button>
+              <button
+                type="button"
+                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Facebook
+              </button>
+            </div>
+          </div>
+
+          <p className="mt-8 text-center text-sm text-gray-600">
+            ¿No tienes una cuenta?{' '}
+            <a href="#" className="font-medium text-purple-600 hover:text-purple-500">
+              Regístrate para descubrir tu aroma
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 
