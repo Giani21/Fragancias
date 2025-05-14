@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { Mail, Lock, Sprout, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../../context/authContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,8 +32,8 @@ const Login = () => {
         return;
       }
 
-      localStorage.setItem('token', data.token);
-      // Redirección o lógica post-login va acá
+      login(data.token, { id: data.user.id, name: data.user.name }); // Pasa el token y el objeto del usuario
+      navigate('/'); // Redirige al home u otra ruta
 
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
@@ -65,7 +70,6 @@ const Login = () => {
       {/* Sección formulario */}
       <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-b from-purple-50 to-white p-8">
         <div className="w-full max-w-md">
-          {/* Logo y bienvenida */}
           <div className="text-center mb-10">
             <div className="inline-flex items-center justify-center p-4 bg-purple-100 rounded-full mb-6">
               <Sprout className="h-10 w-10 text-purple-600" />
@@ -74,7 +78,6 @@ const Login = () => {
             <p className="mt-3 text-gray-500">Ingresa a tu cuenta y descubre nuestras nuevas fragancias</p>
           </div>
 
-          {/* Error */}
           {error && (
             <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-md flex items-start">
               <AlertCircle className="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -82,7 +85,6 @@ const Login = () => {
             </div>
           )}
 
-          {/* Formulario */}
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo electrónico</label>
@@ -151,7 +153,6 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Login con redes */}
           <div className="mt-10">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">

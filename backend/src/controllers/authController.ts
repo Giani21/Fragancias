@@ -83,3 +83,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const logoutUser: RequestHandler = (req, res) => {
+  res.status(200).json({ message: 'Logout exitoso' });
+};
