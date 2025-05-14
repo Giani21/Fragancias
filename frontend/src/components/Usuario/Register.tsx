@@ -9,6 +9,7 @@ const Register = () => {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -17,8 +18,14 @@ const Register = () => {
     setError('');
     setIsLoading(true);
 
-    if (!nombre || !email || !password) {
+    if (!nombre || !email || !password || !confirmPassword) {
       setError('Por favor, completa todos los campos.');
+      setIsLoading(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden.');
       setIsLoading(false);
       return;
     }
@@ -28,7 +35,11 @@ const Register = () => {
       alert('Usuario registrado con éxito');
       navigate('/login');
     } catch (err) {
-      setError('Hubo un error al registrar al usuario. Intenta de nuevo.');
+      if (axios.isAxiosError(err) && err.response?.status === 400) {
+        setError(err.response.data.message || 'Error al registrar.');
+      } else {
+        setError('Hubo un error al registrar al usuario. Intenta de nuevo.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -121,6 +132,26 @@ const Register = () => {
               </div>
             </div>
 
+            {/* Confirmar contraseña */}
+            <div className="space-y-4">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Confirmar contraseña
+              </label>
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="Repetí tu contraseña"
+                />
+              </div>
+            </div>
+
             {/* Botón */}
             <button
               type="submit"
@@ -156,7 +187,7 @@ const Register = () => {
         style={{ backgroundImage: "url('/api/placeholder/800/1200')" }}
       >
         <div className="h-full w-full bg-gradient-to-t from-purple-900/90 via-purple-600/60 to-transparent flex flex-col justify-end p-12">
-          <h1 className="text-white text-4xl font-bold mb-4">Essence</h1>
+          <h1 className="text-white text-4xl font-bold mb-4">Fragancias Le France</h1>
           <p className="text-white/80 text-xl mb-6">Regístrate y encuentra tu aroma ideal</p>
           <div className="flex space-x-4 mb-12">
             <span className="inline-block w-12 h-1 bg-white rounded-full"></span>

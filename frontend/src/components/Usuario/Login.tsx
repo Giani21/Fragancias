@@ -52,7 +52,7 @@ const Login = () => {
         style={{ backgroundImage: "url('/api/placeholder/800/1200')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-purple-900/90 via-purple-600/60 to-transparent p-12 flex flex-col justify-end">
-          <h1 className="text-white text-4xl font-bold mb-4">Essence</h1>
+          <h1 className="text-white text-4xl font-bold mb-4">Fragancias Le France</h1>
           <p className="text-white/80 text-xl mb-6">Descubre la fragancia que refleja tu personalidad</p>
           <div className="flex space-x-4 mb-12">
             <span className="inline-block w-12 h-1 bg-white rounded-full"></span>
