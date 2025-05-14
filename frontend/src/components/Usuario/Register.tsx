@@ -53,12 +53,12 @@ const Register = () => {
       exit={{ opacity: 0, x: -window.innerWidth }}
       transition={{ duration: 1, ease: 'easeInOut', type: 'tween' }}
     >
-      {/* Panel izquierdo (formulario) */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-purple-50 to-white">
+      {/* Panel izquierdo */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 py-12 bg-white">
         <div className="w-full max-w-md">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center p-4 bg-purple-100 rounded-full mb-6">
-              <Sprout className="h-10 w-10 text-purple-600" />
+            <div className="inline-flex items-center justify-center p-4 bg-red-100 rounded-full mb-6">
+              <Sprout className="h-10 w-10 text-[#D50032]" />
             </div>
             <h2 className="text-3xl font-bold text-gray-800">Crear cuenta</h2>
             <p className="mt-3 text-gray-500">Completa tus datos para comenzar</p>
@@ -72,7 +72,6 @@ const Register = () => {
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Nombre */}
             <div className="space-y-4">
               <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
                 Nombre completo
@@ -86,13 +85,12 @@ const Register = () => {
                   type="text"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
-                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-[#D50032] focus:border-[#D50032]"
                   placeholder="Tu nombre completo"
                 />
               </div>
             </div>
 
-            {/* Email */}
             <div className="space-y-4">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Correo electrónico
@@ -106,13 +104,12 @@ const Register = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-[#D50032] focus:border-[#D50032]"
                   placeholder="tu@email.com"
                 />
               </div>
             </div>
 
-            {/* Password */}
             <div className="space-y-4">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Contraseña
@@ -126,13 +123,12 @@ const Register = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-[#D50032] focus:border-[#D50032]"
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
-            {/* Confirmar contraseña */}
             <div className="space-y-4">
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 Confirmar contraseña
@@ -146,17 +142,16 @@ const Register = () => {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-[#D50032] focus:border-[#D50032]"
                   placeholder="Repetí tu contraseña"
                 />
               </div>
             </div>
 
-            {/* Botón */}
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-3 px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-70"
+              className="group relative w-full flex justify-center py-3 px-4 bg-gradient-to-r from-[#D50032] to-[#F44336] hover:from-[#F44336] hover:to-[#D50032] text-white rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D50032] disabled:opacity-70"
             >
               {isLoading ? (
                 <span className="flex items-center">
@@ -174,21 +169,21 @@ const Register = () => {
 
           <p className="mt-8 text-center text-sm text-gray-600">
             ¿Ya tenés una cuenta?{' '}
-            <a href="/login" className="font-medium text-purple-600 hover:text-purple-500">
+            <a href="/login" className="font-medium text-[#D50032] hover:text-[#F44336]">
               Iniciar sesión
             </a>
           </p>
         </div>
       </div>
 
-      {/* Panel derecho (imagen decorativa) */}
+      {/* Panel derecho */}
       <div
         className="hidden lg:block lg:w-1/2 bg-cover bg-center"
         style={{ backgroundImage: "url('/api/placeholder/800/1200')" }}
       >
-        <div className="h-full w-full bg-gradient-to-t from-purple-900/90 via-purple-600/60 to-transparent flex flex-col justify-end p-12">
+        <div className="h-full w-full bg-gradient-to-b from-[#D50032] to-[#F44336] flex flex-col justify-end p-12">
           <h1 className="text-white text-4xl font-bold mb-4">Fragancias Le France</h1>
-          <p className="text-white/80 text-xl mb-6">Regístrate y encuentra tu aroma ideal</p>
+          <p className="text-white/80 text-xl mb-6">Regístrate y encontrá tu aroma ideal</p>
           <div className="flex space-x-4 mb-12">
             <span className="inline-block w-12 h-1 bg-white rounded-full"></span>
             <span className="inline-block w-4 h-1 bg-white/50 rounded-full"></span>

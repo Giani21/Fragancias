@@ -32,9 +32,8 @@ const Login = () => {
         return;
       }
 
-      login(data.token, { id: data.user.id, name: data.user.name }); // Pasa el token y el objeto del usuario
-      navigate('/'); // Redirige al home u otra ruta
-
+      login(data.token, { id: data.user.id, name: data.user.name });
+      navigate('/');
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
       setError('Error al conectar con el servidor');
@@ -51,12 +50,11 @@ const Login = () => {
       exit={{ opacity: 0, x: window.innerWidth }}
       transition={{ duration: 1, ease: 'easeInOut', type: 'tween' }}
     >
-      {/* Sección visual */}
+      {/* Sección azul (izquierda) */}
       <div
-        className="hidden lg:flex w-1/2 items-center justify-center bg-cover bg-center relative"
-        style={{ backgroundImage: "url('/api/placeholder/800/1200')" }}
+        className="hidden lg:flex w-1/2 items-center justify-center bg-[#002654] relative"
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/90 via-purple-600/60 to-transparent p-12 flex flex-col justify-end">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#002654]/90 via-[#002654]/60 to-transparent p-12 flex flex-col justify-end">
           <h1 className="text-white text-4xl font-bold mb-4">Fragancias Le France</h1>
           <p className="text-white/80 text-xl mb-6">Descubre la fragancia que refleja tu personalidad</p>
           <div className="flex space-x-4 mb-12">
@@ -67,12 +65,16 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Sección formulario */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-b from-purple-50 to-white p-8">
-        <div className="w-full max-w-md">
+      {/* Sección formulario con trama roja */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white relative p-8 overflow-hidden">
+        {/* Trama roja de puntos */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle,#EF413533_1px,transparent_1px)] bg-[size:20px_20px] opacity-40 pointer-events-none"></div>
+
+        {/* Caja del formulario */}
+        <div className="w-full max-w-md relative z-10">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center p-4 bg-purple-100 rounded-full mb-6">
-              <Sprout className="h-10 w-10 text-purple-600" />
+            <div className="inline-flex items-center justify-center p-4 bg-[#EF4135]/10 rounded-full mb-6">
+              <Sprout className="h-10 w-10 text-[#EF4135]" />
             </div>
             <h2 className="text-3xl font-bold text-gray-800">Bienvenido de nuevo</h2>
             <p className="mt-3 text-gray-500">Ingresa a tu cuenta y descubre nuestras nuevas fragancias</p>
@@ -98,7 +100,7 @@ const Login = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-[#EF4135] focus:border-[#EF4135]"
                   placeholder="tu@email.com"
                 />
               </div>
@@ -107,7 +109,7 @@ const Login = () => {
             <div>
               <div className="flex justify-between items-center">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
-                <button type="button" className="text-sm text-purple-600 hover:text-purple-500">¿Olvidaste tu contraseña?</button>
+                <button type="button" className="text-sm text-[#EF4135] hover:text-[#c53030]">¿Olvidaste tu contraseña?</button>
               </div>
               <div className="relative mt-1">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -119,7 +121,7 @@ const Login = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  className="pl-10 block w-full border-gray-300 rounded-lg py-3 bg-white border focus:ring-2 focus:ring-[#EF4135] focus:border-[#EF4135]"
                   placeholder="••••••••"
                 />
               </div>
@@ -129,7 +131,7 @@ const Login = () => {
               <input
                 id="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                className="h-4 w-4 text-[#EF4135] focus:ring-[#EF4135] border-gray-300 rounded"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">Recordarme</label>
             </div>
@@ -137,7 +139,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-3 px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-70"
+              className="group relative w-full flex justify-center py-3 px-4 bg-gradient-to-r from-[#EF4135] to-[#ff6b61] hover:from-[#e6322c] hover:to-[#ff4949] text-white rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EF4135] disabled:opacity-70"
             >
               {isLoading ? (
                 <span className="flex items-center">
@@ -175,7 +177,7 @@ const Login = () => {
 
           <p className="mt-8 text-center text-sm text-gray-600">
             ¿No tienes una cuenta?{' '}
-            <a href="/register" className="font-medium text-purple-600 hover:text-purple-500">
+            <a href="/register" className="font-medium text-[#EF4135] hover:text-[#c53030]">
               Regístrate para descubrir tu aroma
             </a>
           </p>
