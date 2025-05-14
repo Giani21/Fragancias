@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Sprout,
   LogIn,
-  UserPlus,
   Search,
   ShoppingBag,
   Heart,
@@ -10,6 +9,7 @@ import {
   Menu,
   X,
   ChevronRight,
+  LogOut,
   Mail,
   Phone,
   MapPin,
@@ -22,8 +22,10 @@ import {
   CreditCard,
   Users
 } from 'lucide-react';
+import { useAuth } from '../../context/authContext'; // Asegúrate de que esta ruta sea correcta
 
 const Home = () => {
+  const { isLoggedIn, logout } = useAuth(); // Obtenemos el estado de autenticación
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -77,28 +79,28 @@ const Home = () => {
   ];
 
   // Datos de categorías (podrían venir de una API)
-    const categories = [
-        {
-            name: "Para Ella",
-            description: "Fragancias elegantes y sofisticadas",
-            image: "/api/placeholder/400/300?text=Mujer"  // Usar URL de imagen real
-        },
-        {
-            name: "Para Él",
-            description: "Aromas intensos y masculinos",
-            image: "/api/placeholder/400/300?text=Hombre" // Usar URL de imagen real
-        },
-        {
-            name: "Colección Lujo",
-            description: "Nuestra selección más exclusiva",
-            image: "/api/placeholder/400/300?text=Lujo"   // Usar URL de imagen real
-        },
-        {
-            name: "Estuches de Regalo",
-            description: "Sets especiales para regalo",
-            image: "/api/placeholder/400/300?text=Regalos" // Usar URL de imagen real
-        }
-    ];
+  const categories = [
+    {
+      name: "Para Ella",
+      description: "Fragancias elegantes y sofisticadas",
+      image: "/api/placeholder/400/300?text=Mujer"  // Usar URL de imagen real
+    },
+    {
+      name: "Para Él",
+      description: "Aromas intensos y masculinos",
+      image: "/api/placeholder/400/300?text=Hombre" // Usar URL de imagen real
+    },
+    {
+      name: "Colección Lujo",
+      description: "Nuestra selección más exclusiva",
+      image: "/api/placeholder/400/300?text=Lujo"   // Usar URL de imagen real
+    },
+    {
+      name: "Estuches de Regalo",
+      description: "Sets especiales para regalo",
+      image: "/api/placeholder/400/300?text=Regalos" // Usar URL de imagen real
+    }
+  ];
 
   // Componente para el logo
   const Logo = () => (
@@ -111,6 +113,13 @@ const Home = () => {
       </div>
     </div>
   );
+
+  const handleLogout = () => {
+    logout(); // Llamamos a la función logout del contexto
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = '/login'; // Redirigimos al login después de cerrar sesión
+  };
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -158,9 +167,17 @@ const Home = () => {
               <a href="#" className="p-2 text-gray-600 hover:text-blue-600">
                 <ShoppingBag size={20} />
               </a>
-              <a href="/login" className="text-gray-800 hover:text-blue-600 font-medium">
-                <LogIn size={20} className="inline mr-1" /> Iniciar Sesión
-              </a>
+
+              {/* Botón de Iniciar sesión / Cerrar sesión */}
+              {!isLoggedIn ? (
+                <a href="/login" className="text-gray-800 hover:text-blue-600 font-medium">
+                  <LogIn size={20} className="inline mr-1" /> Iniciar Sesión
+                </a>
+              ) : (
+                <button onClick={handleLogout} className="text-gray-800 hover:text-blue-600 font-medium flex items-center">
+                  <LogOut size={20} className="inline mr-1" /> Cerrar Sesión
+                </button>
+              )}
             </div>
 
             {/* Acciones de usuario en móvil */}
@@ -171,55 +188,24 @@ const Home = () => {
               <a href="#" className="p-2 text-gray-600">
                 <ShoppingBag size={20} />
               </a>
-            </div>
-          </div>
 
-          {/* Barra de búsqueda desplegable */}
-          {isSearchOpen && (
-            <div className="pt-4 pb-2">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Buscar una fragancia..."
-                  className="w-full pl-10 pr-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  autoFocus
-                />
-                <button
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-                  onClick={() => setIsSearchOpen(false)}
-                >
-                  <X size={18} />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Menú móvil desplegable */}
-          {isMenuOpen && (
-            <div className="md:hidden py-4 border-t mt-4">
-              <div className="flex flex-col space-y-4">
-                <a href="#" className="text-gray-800 hover:text-blue-600 font-medium">Novedades</a>
-                <a href="#" className="text-gray-800 hover:text-blue-600 font-medium">Para Ella</a>
-                <a href="#" className="text-gray-800 hover:text-blue-600 font-medium">Para Él</a>
-                <a href="#" className="text-gray-800 hover:text-blue-600 font-medium">Colecciones</a>
-                <a href="#" className="text-gray-800 hover:text-blue-600 font-medium">Sobre Nosotros</a>
+              {/* Botón de Iniciar sesión / Cerrar sesión en móvil */}
+              {!isLoggedIn ? (
                 <a href="/login" className="text-gray-800 hover:text-blue-600 font-medium flex items-center">
                   <LogIn size={16} className="mr-2" /> Iniciar Sesión
                 </a>
-                <a href="/register" className="text-gray-800 hover:text-blue-600 font-medium flex items-center">
-                  <UserPlus size={16} className="mr-2" /> Registrarse
-                </a>
-                <a href="#" className="text-gray-800 hover:text-blue-600 font-medium flex items-center">
-                  <Heart size={16} className="mr-2" /> Favoritos
-                </a>
-              </div>
+              ) : (
+                <button onClick={handleLogout} className="text-gray-800 hover:text-blue-600 font-medium flex items-center">
+                  <LogOut size={16} className="mr-2" /> Cerrar Sesión
+                </button>
+              )}
             </div>
-          )}
+          </div>
+
+          {/* El resto del contenido de la página */}
         </div>
       </nav>
+
 
       {/* Sección de cabecera (hero) */}
       <section className="relative bg-gray-900 overflow-hidden">
